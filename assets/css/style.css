@@ -1875,3 +1875,19 @@ textarea.form-input::-webkit-resizer { display: none; }
   .timeline-text { max-width: 700px; }
 
 }
+
+/* 默认情况下，所有页面内容都隐藏 */
+[data-page] {
+  display: none; /* 隐藏所有内容部分 */
+}
+
+/* 当页面具有 active 类时，显示该内容 */
+[data-page].active {
+  display: block; /* 或者使用 flex，根据需要选择 */
+}
+
+/* 可选：为活动的导航链接添加样式 */
+.navbar-link.active {
+  color: blue; /* 高亮显示活动链接的颜色 */
+  font-weight: bold; /* 加粗活动链接 */
+}
