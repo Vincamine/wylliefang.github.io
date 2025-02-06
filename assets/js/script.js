@@ -50,8 +50,20 @@ for (let i = 0; i < testimonialsItem.length; i++) {
 }
 
 // add click event to modal close button
-modalCloseBtn.addEventListener("click", testimonialsModalFunc);
-overlay.addEventListener("click", testimonialsModalFunc);
+// modalCloseBtn.addEventListener("click", testimonialsModalFunc);
+// overlay.addEventListener("click", testimonialsModalFunc);
+document.addEventListener("DOMContentLoaded", function() {
+  const modalCloseBtn = document.querySelector("[data-modal-close-btn]");
+  const overlay = document.querySelector("[data-overlay]");
+
+  // 确保元素存在后再添加事件监听器
+  if (modalCloseBtn && overlay) {
+      modalCloseBtn.addEventListener("click", testimonialsModalFunc);
+      overlay.addEventListener("click", testimonialsModalFunc);
+  } else {
+      console.error("Modal close button or overlay not found.");
+  }
+});
 
 
 
