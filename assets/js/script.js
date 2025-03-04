@@ -52,18 +52,18 @@ for (let i = 0; i < testimonialsItem.length; i++) {
 // add click event to modal close button
 modalCloseBtn.addEventListener("click", testimonialsModalFunc);
 overlay.addEventListener("click", testimonialsModalFunc);
-// document.addEventListener("DOMContentLoaded", function() {
-//   const modalCloseBtn = document.querySelector("[data-modal-close-btn]");
-//   const overlay = document.querySelector("[data-overlay]");
+document.addEventListener("DOMContentLoaded", function() {
+  const modalCloseBtn = document.querySelector("[data-modal-close-btn]");
+  const overlay = document.querySelector("[data-overlay]");
 
-//   // Ensure elements exist before adding event listeners
-//   if (modalCloseBtn && overlay) {
-//       modalCloseBtn.addEventListener("click", testimonialsModalFunc);
-//       overlay.addEventListener("click", testimonialsModalFunc);
-//   } else {
-//       console.error("Modal close button or overlay not found.");
-//   }
-// });
+  // Ensure elements exist before adding event listeners
+  if (modalCloseBtn && overlay) {
+      modalCloseBtn.addEventListener("click", testimonialsModalFunc);
+      overlay.addEventListener("click", testimonialsModalFunc);
+  } else {
+      console.error("Modal close button or overlay not found.");
+  }
+});
 
 
 // custom select variables
