@@ -543,24 +543,6 @@ main {
 \*-----------------------------------*/
 
 
-.contact-link {
-  display: inline-block;
-  width: auto;
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-size: 13px;
-}
-
-/* Ensure contact-info container allows full width */
-.contact-info {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  padding-right: 10px;
-}
-
 
 
 /*-----------------------------------*\
@@ -1134,7 +1116,7 @@ textarea.form-input::-webkit-resizer { display: none; }
  * responsive larger than 580px screen (not 450)
  */
 
-@media (min-width: 580px) {  
+@media (min-width: 1024px) {  
 
   /**
    * client
@@ -1157,10 +1139,14 @@ textarea.form-input::-webkit-resizer { display: none; }
     width: 100%;
     max-width: 100%;
   }
+  
   .contact-link {
     font-size: 12px; /* Slightly smaller on mobile if needed */
   }
-
+  .sidebar {
+    width: 650px; /* Increase from 548px to a wider value */
+    max-width: 30%; /* You can also use percentage for responsiveness */
+  }
 }
 
 
