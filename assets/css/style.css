@@ -455,7 +455,7 @@ main {
   text-overflow: ellipsis; /* Add ellipsis for text overflow */
   white-space: nowrap;  /* Keep text on one line */
   font-size: 13px;
-  color: #FAFAFA;     /* Match your color from screenshot */
+  color: #FAFAFA;     /* Match the color from screenshot */
   font-family: Poppins, sans-serif;
 }
 
@@ -489,7 +489,7 @@ main {
 
 
 /*-----------------------------------*\
-  #NAVBAR
+  #media
 \*-----------------------------------*/
 
 .navbar {
@@ -517,30 +517,11 @@ main {
   color: var(--light-gray);
   font-size: var(--fs-8);
   padding: 20px 7px;
-  transition: color var(--transition-1);
-}
-
-.navbar-link:hover,
-.navbar-link:focus { color: var(--light-gray-70); }
-
-.navbar-link.active { color: var(--orange-yellow-crayola); }
-
-
-
-/*-----------------------------------*\
-  #Welcome
-\*-----------------------------------*/
-.navbar-link {
-  color: var(--light-gray);
-  font-size: var(--fs-8);
-  padding: 20px 7px;
-  transition: color var(--transition-1);
-}
-
-/* Add this class to enhance your navbar links */
-.navbar-link {
+  /* transition: color var(--transition-1); */
+  /* Add this class to enhance my navbar links */
   transition: transform 0.2s, box-shadow 0.2s, color var(--transition-1);
 }
+
 
 .navbar-link:hover {
   color: var(--light-gray-70);
@@ -548,14 +529,39 @@ main {
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
+.navbar-link:focus { color: var(--light-gray-70); }
+
 .navbar-link:active {
   transform: scale(0.95);
-  box-shadow: 0 0 8px rgba(74, 134, 232, 0.7); /* Using your apple-blue color */
+  color: var(--orange-yellow-crayola);
+  box-shadow: 0 0 8px rgba(74, 134, 232, 0.7); /* Using my apple-blue color */
 }
 
-.navbar-link.active {
-  color: var(--orange-yellow-crayola);
+
+/*-----------------------------------*\
+  #Welcome
+\*-----------------------------------*/
+
+
+.contact-link {
+  display: inline-block;
+  width: auto;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
 }
+
+/* Ensure contact-info container allows full width */
+.contact-info {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding-right: 10px;
+}
+
+
 
 /*-----------------------------------*\
   #ABOUT
@@ -1125,10 +1131,10 @@ textarea.form-input::-webkit-resizer { display: none; }
 \*-----------------------------------*/
 
 /**
- * responsive larger than 450px screen
+ * responsive larger than 580px screen (not 450)
  */
 
-@media (min-width: 450px) {
+@media (min-width: 580px) {  
 
   /**
    * client
@@ -1146,7 +1152,13 @@ textarea.form-input::-webkit-resizer { display: none; }
 
 
   .contact-info {
-    white-space: normal; /* Allow wrapping on mobile */
+    /* white-space: normal; */
+    /* Allow wrapping on mobile */
+    width: 100%;
+    max-width: 100%;
+  }
+  .contact-link {
+    font-size: 12px; /* Slightly smaller on mobile if needed */
   }
 
 }
