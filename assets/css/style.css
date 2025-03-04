@@ -1515,3 +1515,110 @@ textarea.form-input::-webkit-resizer { display: none; }
   transform: translateY(-3px);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
+
+
+/* water ripple */
+
+/* Ensure the ripple effect sits behind content */
+body {
+  position: relative;
+}
+
+/* Enhance content visibility over the ripple */
+.sidebar, 
+article, 
+.service-item, 
+.content-card, 
+.timeline-item,
+.navbar {
+  position: relative;
+  z-index: 2;
+  backdrop-filter: blur(2px); /* Subtle blur for depth */
+}
+
+/* Add subtle reflections to match water theme */
+.sidebar, 
+article, 
+.service-item, 
+.testimonials-item .content-card {
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: var(--shadow-1), 
+              0 0 15px rgba(255, 215, 0, 0.05); /* Golden glow matching your orange-yellow theme */
+}
+
+/* Add subtle animations to icons to simulate floating on water */
+.icon-box,
+.service-icon-box {
+  animation: floating 3s ease-in-out infinite;
+}
+
+/* Add ripple effect to interactive elements */
+.info_more-btn,
+.navbar-link,
+.form-btn,
+.social-link {
+  position: relative;
+  overflow: hidden;
+}
+
+.info_more-btn::after,
+.navbar-link::after,
+.form-btn::after,
+.social-link::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  background: rgba(255, 215, 0, 0.3); /* Matches your orange-yellow-crayola */
+  opacity: 0;
+  border-radius: 100%;
+  transform: scale(1, 1) translate(-50%, -50%);
+  transform-origin: 50% 50%;
+}
+
+.info_more-btn:focus:not(:active)::after,
+.navbar-link:focus:not(:active)::after,
+.form-btn:focus:not(:active)::after,
+.social-link:focus:not(:active)::after {
+  animation: ripple 1s ease-out;
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0, 0);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(100, 100);
+    opacity: 0;
+  }
+}
+
+@keyframes floating {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
+  100% { transform: translateY(0px); }
+}
+
+/* Enhance testimonial cards to look like they're floating on water */
+.testimonials-item .content-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.testimonials-item .content-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2), 
+              0 0 20px rgba(255, 215, 0, 0.1); /* Golden highlight */
+}
+
+/* Make the timeline elements look like they interact with water */
+.timeline-item::after {
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); /* Golden glow */
+  transition: box-shadow 0.3s ease;
+}
+
+.timeline-item:hover::after {
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.8); /* Enhanced glow on hover */
+}
