@@ -162,7 +162,7 @@
           </li>
 
           <li class="navbar-item">
-            <button class="navbar-link" data-nav-link="skills">Leadership</button>
+            <button class="navbar-link" data-nav-link="leadership">Leadership</button>
           </li>
 
           <li class="navbar-item">
@@ -892,6 +892,43 @@
   <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      console.log("DOM loaded - adding navigation handlers");
+      
+      // 获取所有导航链接和页面
+      const navigationLinks = document.querySelectorAll("[data-nav-link]");
+      const pages = document.querySelectorAll("[data-page]");
+      
+      console.log("Found navigation links:", navigationLinks.length);
+      console.log("Found pages:", pages.length);
+      
+      // 为每个导航链接添加点击事件
+      navigationLinks.forEach(function(link) {
+        link.addEventListener("click", function() {
+          const targetPage = this.getAttribute("data-nav-link");
+          console.log("Clicked navigation to:", targetPage);
+          
+          // 隐藏所有页面
+          pages.forEach(function(page) {
+            page.classList.remove("active");
+          });
+          
+          // 取消所有导航链接的活动状态
+          navigationLinks.forEach(function(navLink) {
+            navLink.classList.remove("active");
+          });
+          
+          // 显示目标页面和激活当前导航链接
+          document.querySelector(`[data-page="${targetPage}"]`).classList.add("active");
+          this.classList.add("active");
+          
+          // 滚动到顶部
+          window.scrollTo(0, 0);
+        });
+      });
+    });
+  </script>
 </body>
 
 </html>

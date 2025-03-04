@@ -1,10 +1,9 @@
 'use strict';
 
-
+console.log("Script loaded"); //ADD
 
 // element toggle function
 const elementToggleFunc = function (elem) { elem.classList.toggle("active"); }
-
 
 
 // sidebar variables
