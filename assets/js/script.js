@@ -50,8 +50,9 @@ for (let i = 0; i < testimonialsItem.length; i++) {
 }
 
 // add click event to modal close button
-modalCloseBtn.addEventListener("click", testimonialsModalFunc);
-overlay.addEventListener("click", testimonialsModalFunc);
+// modalCloseBtn.addEventListener("click", testimonialsModalFunc);
+// overlay.addEventListener("click", testimonialsModalFunc);
+
 document.addEventListener("DOMContentLoaded", function() {
   const modalCloseBtn = document.querySelector("[data-modal-close-btn]");
   const overlay = document.querySelector("[data-overlay]");
@@ -177,7 +178,7 @@ for (let i = 0; i < navigationLinks.length; i++) {
     for (let j = 0; j < pages.length; j++) {
       if (pages[j].dataset.page === targetPage) {
         pages[j].classList.add("active");
-        navigationLinks[j].classList.add("active");
+        navigationLinks[i].classList.add("active");
       } else {
         pages[j].classList.remove("active");
         navigationLinks[j].classList.remove("active");
