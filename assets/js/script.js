@@ -172,18 +172,18 @@ const pages = document.querySelectorAll("[data-page]");
 // add event to all nav link
 for (let i = 0; i < navigationLinks.length; i++) {
   navigationLinks[i].addEventListener("click", function () {
-    const targetPage = this.getAttribute("data-nav-link"); // 获取目标页面
+    const targetPage = this.getAttribute("data-nav-link"); 
 
     for (let j = 0; j < pages.length; j++) {
       if (pages[j].dataset.page === targetPage) {
-        pages[j].classList.add("active"); // 显示目标页面
-        navigationLinks[j].classList.add("active"); // 高亮当前链接
+        pages[j].classList.add("active");
+        navigationLinks[j].classList.add("active");
       } else {
-        pages[j].classList.remove("active"); // 隐藏其他页面
-        navigationLinks[j].classList.remove("active"); // 移除高亮
+        pages[j].classList.remove("active");
+        navigationLinks[j].classList.remove("active");
       }
     }
 
-    window.scrollTo(0, 0); // 滚动到顶部
+    window.scrollTo(0, 0);
   });
 }

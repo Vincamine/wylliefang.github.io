@@ -177,10 +177,8 @@
         - #Welcome
       -->
       <article class="welcome active" data-page="welcome">
-        <header>
-          <h2 class="h2 article-title">Welcome</h2>
-        </header>
-
+        <!-- Removed the header with "Welcome" title -->
+        
         <section class="intro-section" data-aos="fade-up" data-aos-duration="1000">
           <div class="intro-content">
             <h3 class="intro-headline">Engineering roadblocks? I turn them into stepping stones.</h3>
@@ -202,8 +200,6 @@
           </div>
           
           <div class="intro-visual" data-aos="zoom-in" data-aos-delay="300">
-
-            <!-- Placeholder for a visual element -->
             <div class="code-animation">
               <pre><code class="typing-animation">function innovate() {
   const ideas = [];
@@ -214,14 +210,12 @@
   }
 }</code></pre>
             </div>
-            
           </div>
         </section>
 
         <section class="video-pitch" data-aos="fade-up" data-aos-delay="200">
           <h3 class="section-title">Watch My Pitch</h3>
           <div class="video-container">
-            <!-- Replace with actual video embed -->
             <div class="video-placeholder">
               <ion-icon name="play-circle-outline" class="play-icon"></ion-icon>
               <span>Video Pitch Coming Soon</span>
@@ -230,7 +224,7 @@
         </section>
 
         <section class="cv-link-section" data-aos="fade-up" data-aos-delay="300">
-          <a href="#" class="cv-button">
+          <a href="#" class="cv-button apple-button">
             <ion-icon name="document-text-outline"></ion-icon>
             <span>Download CV</span>
           </a>
@@ -238,95 +232,114 @@
 
       </article>
 
+
       <!--
         - #ABOUT
       -->
       <article class="about" data-page="about">
         <header>
-          <h2 class="h2 article-title"></h2>
+          <h2 class="h2 article-title">About Me</h2>
         </header>
 
-        <section class="about-text">
+        <section class="about-text" data-aos="fade-up">
           <p>
-            I'm Wenxue
+            I'm Wenxue, a passionate software engineer who believes in creating elegant solutions to complex problems.
           </p>
 
           <p>
-            My interests is..
+            My interests include distributed systems, cloud architecture, and creating user-centric applications that make a difference.
           </p>
         </section>
 
+        <!--
+          - Education
+        -->
+        <section class="education-section" data-aos="fade-up" data-aos-delay="100">
+          <h3 class="h3 education-title">Education</h3>
+          
+          <div class="education-item">
+            <div class="education-icon">
+              <ion-icon name="school-outline"></ion-icon>
+            </div>
+            <div class="education-content">
+              <h4>Northeastern University</h4>
+              <p>Master of Science in Computer Science</p>
+              <span class="duration">2020 - 2022</span>
+            </div>
+          </div>
+          
+          <!-- Add more education items as needed -->
+        </section>
 
         <!--
           - service
         -->
 
-        <section class="service">
+        <section class="service" data-aos="fade-up" data-aos-delay="200">
 
-          <h3 class="h3 service-title">What i'm doing</h3>
+          <h3 class="h3 service-title">What I'm Doing</h3>
 
           <ul class="service-list">
 
-            <li class="service-item">
+            <li class="service-item" data-aos="flip-left" data-aos-delay="100">
 
               <div class="service-icon-box">
-                <img src="./assets/images/icon-design.svg
-                " alt="design icon" width="40">
+                <img src="./assets/images/icon-design.svg" alt="design icon" width="40">
               </div>
 
               <div class="service-content-box">
-                <h4 class="h4 service-item-title">Web design</h4>
+                <h4 class="h4 service-item-title">Web Design</h4>
 
                 <p class="service-item-text">
-                  The most modern and high-quality design made at a professional level.
+                  Creating modern, intuitive, and responsive user interfaces with a focus on user experience.
                 </p>
               </div>
 
             </li>
 
-            <li class="service-item">
+            <li class="service-item" data-aos="flip-left" data-aos-delay="200">
 
               <div class="service-icon-box">
                 <img src="./assets/images/icon-dev.svg" alt="Web development icon" width="40">
               </div>
 
               <div class="service-content-box">
-                <h4 class="h4 service-item-title">Web development</h4>
+                <h4 class="h4 service-item-title">Web Development</h4>
 
                 <p class="service-item-text">
-                  High-quality development of sites at the professional level.
+                  Building scalable web applications using modern frameworks and best practices.
                 </p>
               </div>
 
             </li>
 
-            <li class="service-item">
+            <li class="service-item" data-aos="flip-left" data-aos-delay="300">
 
               <div class="service-icon-box">
                 <img src="./assets/images/icon-app.svg" alt="mobile app icon" width="40">
               </div>
 
               <div class="service-content-box">
-                <h4 class="h4 service-item-title">Mobile apps</h4>
+                <h4 class="h4 service-item-title">Mobile Apps</h4>
 
                 <p class="service-item-text">
-                  Professional development of applications for iOS and Android.
+                  Developing cross-platform mobile applications that provide seamless experiences.
                 </p>
               </div>
 
             </li>
 
-            <li class="service-item">
+            <li class="service-item" data-aos="flip-left" data-aos-delay="400">
 
               <div class="service-icon-box">
                 <img src="./assets/images/icon-photo.svg" alt="camera icon" width="40">
               </div>
 
               <div class="service-content-box">
-                <h4 class="h4 service-item-title">Photography</h4>
+                <h4 class="h4 service-item-title">Cloud Architecture</h4>
 
                 <p class="service-item-text">
-                  I make high-quality photos of any category at a professional level.
+                  Designing and implementing scalable, resilient cloud-based solutions.
                 </p>
               </div>
 
@@ -341,13 +354,13 @@
           - testimonials
         -->
 
-        <section class="testimonials">
+        <section class="testimonials" data-aos="fade-up" data-aos-delay="300">
 
           <h3 class="h3 testimonials-title">Testimonials</h3>
 
           <ul class="testimonials-list has-scrollbar">
 
-            <li class="testimonials-item">
+            <li class="testimonials-item" data-aos="zoom-in" data-aos-delay="100">
               <div class="content-card" data-testimonials-item>
 
                 <figure class="testimonials-avatar-box">
@@ -358,14 +371,14 @@
 
                 <div class="testimonials-text" data-testimonials-text>
                   <p>
-                    Wyllie
+                    Wyllie is an exceptional engineer with a keen eye for detail and the ability to solve complex problems elegantly.
                   </p>
                 </div>
 
               </div>
             </li>
 
-            <li class="testimonials-item">
+            <li class="testimonials-item" data-aos="zoom-in" data-aos-delay="200">
               <div class="content-card" data-testimonials-item>
 
                 <figure class="testimonials-avatar-box">
@@ -376,14 +389,14 @@
 
                 <div class="testimonials-text" data-testimonials-text>
                   <p>
-                    Wyllie
+                    Working with Wyllie has been a transformative experience. His innovative approach to engineering challenges is inspiring.
                   </p>
                 </div>
 
               </div>
             </li>
 
-            <li class="testimonials-item">
+            <li class="testimonials-item" data-aos="zoom-in" data-aos-delay="300">
               <div class="content-card" data-testimonials-item>
 
                 <figure class="testimonials-avatar-box">
@@ -394,25 +407,7 @@
 
                 <div class="testimonials-text" data-testimonials-text>
                   <p>
-                    Wyllie
-                  </p>
-                </div>
-
-              </div>
-            </li>
-
-            <li class="testimonials-item">
-              <div class="content-card" data-testimonials-item>
-
-                <figure class="testimonials-avatar-box">
-                  <img src="./assets/images/avatar-4.png" alt="Henry william" width="60" data-testimonials-avatar>
-                </figure>
-
-                <h4 class="h4 testimonials-item-title" data-testimonials-title>Henry william</h4>
-
-                <div class="testimonials-text" data-testimonials-text>
-                  <p>
-                    Wyllie
+                    Wyllie's attention to both technical excellence and user experience sets him apart as a truly visionary developer.
                   </p>
                 </div>
 
@@ -780,12 +775,54 @@
       </article>
 
       <!--
-        - #SKILLS
+        - #LEADERSHIP
       -->
-      <article class="skills" data-page="skills">
+      <article class="leadership" data-page="leadership">
         <header>
-          <h2 class="h2 article-title"></h2>
+          <h2 class="h2 article-title">Leadership</h2>
         </header>
+
+        <section class="leadership-philosophy" data-aos="fade-up">
+          <h3 class="h3">My Leadership Approach</h3>
+          
+          <div class="philosophy-content">
+            <p>
+              I believe in customer-centered product development that prioritizes solving real user problems. My approach focuses on empathy, clarity, and continuous iteration.
+            </p>
+            
+            <div class="leadership-principles" data-aos="fade-up" data-aos-delay="200">
+              <div class="principle-item">
+                <div class="principle-icon">
+                  <ion-icon name="people-outline"></ion-icon>
+                </div>
+                <div class="principle-content">
+                  <h4>Empathetic Leadership</h4>
+                  <p>Understanding team members' strengths and creating an environment where everyone can thrive.</p>
+                </div>
+              </div>
+              
+              <div class="principle-item">
+                <div class="principle-icon">
+                  <ion-icon name="bulb-outline"></ion-icon>
+                </div>
+                <div class="principle-content">
+                  <h4>Innovation Focus</h4>
+                  <p>Encouraging creative thinking and calculated risk-taking to drive breakthrough solutions.</p>
+                </div>
+              </div>
+              
+              <div class="principle-item">
+                <div class="principle-icon">
+                  <ion-icon name="analytics-outline"></ion-icon>
+                </div>
+                <div class="principle-content">
+                  <h4>Data-Driven Decisions</h4>
+                  <p>Using metrics and feedback to continuously improve products and processes.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       </article>
 
       <!--

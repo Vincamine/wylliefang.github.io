@@ -51,7 +51,7 @@
 
   /* solid */
 
-  --jet: hsl(0, 0%, 22%);
+  /* --jet: hsl(0, 0%, 22%);
   --onyx: hsl(240, 1%, 17%);
   --eerie-black-1: hsl(240, 2%, 13%);
   --eerie-black-2: hsl(240, 2%, 12%);
@@ -62,7 +62,37 @@
   --vegas-gold: hsl(45, 54%, 58%);
   --light-gray: hsl(0, 0%, 84%);
   --light-gray-70: hsla(0, 0%, 84%, 0.7);
-  --bittersweet-shimmer: hsl(0, 43%, 51%);
+  --bittersweet-shimmer: hsl(0, 43%, 51%); */
+
+   /* Steve Jobs-inspired colors */
+   --jet: hsl(0, 0%, 19%);
+   --onyx: hsl(240, 1%, 17%);
+   --eerie-black-1: hsl(240, 2%, 13%);
+   --eerie-black-2: hsl(240, 2%, 12%);
+   --smoky-black: hsl(0, 0%, 7%);
+   --white-1: hsl(0, 0%, 100%);
+   --white-2: hsl(0, 0%, 98%);
+   --orange-yellow-crayola: hsl(45, 100%, 72%);
+   --vegas-gold: hsl(45, 54%, 58%);
+   --light-gray: hsl(0, 0%, 84%);
+   --light-gray-70: hsla(0, 0%, 84%, 0.7);
+   --bittersweet-shimmer: hsl(0, 43%, 51%);
+   --apple-blue: hsl(210, 100%, 50%);
+   --apple-gray: hsl(0, 0%, 15%);
+   --apple-silver: hsl(0, 0%, 88%);
+
+
+   /* Apple-inspired gradients */
+  --apple-gradient-blue: linear-gradient(
+    135deg,
+    hsl(199, 98%, 48%) 0%,
+    hsl(199, 98%, 58%) 100%
+  );
+  --apple-gradient-black: linear-gradient(
+    to bottom,
+    hsl(0, 0%, 20%) 0%,
+    hsl(0, 0%, 10%) 100%
+  );
 
   /**
    * typography
