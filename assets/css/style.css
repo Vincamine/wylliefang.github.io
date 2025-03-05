@@ -161,10 +161,10 @@ input, textarea {
 
 html { font-family: var(--ff-poppins); }
 
-/* body { 
+body { 
   background: var(--smoky-black);
   color: var(--white-2);
-} */
+}
 
 /*-----------------------------------*\
   #REUSED STYLE
