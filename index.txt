@@ -26,13 +26,6 @@ Contact
 
 About me
 
-Engineering roadblocks? I turn them into stepping stones. I create highly scalable, resilient solutions that optimize both engineering performance and business impact.
-
-With expertise in Python, JavaScript, Java, Go, and Swift, and a deep understanding of algorithms, system design, and cloud architecture, I create technology that empowers developers and captivates users.
-
-I’m Wenxue (win-shur), but you can call me Wyllie. Code is my canvas, and innovation is my craft.  I believe technology should evolve beautifully without losing its human touch.
-
-
 ## service
 
 What i'm doing
