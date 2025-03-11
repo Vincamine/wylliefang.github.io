@@ -39,10 +39,8 @@ High-quality development of sites at the professional level.
 alt = mobile app icon
 Mobile apps
 
-
 alt = design icon
 System Design
-
 
 alt = camera icon
 AI & AR products
