@@ -1,0 +1,510 @@
+/* ===================================================================
+ * style.css
+ * =================================================================== */
+
+/* ---- reset ---------------------------------------------------- */
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ---- tokens --------------------------------------------------- */
+
+:root {
+  --paper: #ece7dd;
+  --ink: #1c1a17;
+  --ink-soft: #6d675e;
+  --rule: rgba(28, 26, 23, 0.14);
+  --accent: #b4442c;
+
+  /* 第一页专用：深色底衬托冰晶图与浅灰紫胶囊
+     cover page only — the dark ground the lavender capsule sits on */
+  --void: #16151b;
+  --edge: #c6c4d6;
+
+  --serif: "Times New Roman", Times, Georgia, serif;
+  --sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+  --page: 68rem;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ---- base ----------------------------------------------------- */
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100svh;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+body.is-locked {
+  overflow: hidden;
+}
+
+/* 纸张颗粒 / paper grain */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---- 通用文字 / shared type ----------------------------------- */
+
+.eyebrow {
+  font-size: 0.6875rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.display {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(2.75rem, 9vw, 7rem);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+}
+
+.lede {
+  max-width: 34rem;
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  color: var(--ink-soft);
+}
+
+/* ---- 圆形按钮 / the single round button ----------------------- */
+
+.enter {
+  display: grid;
+  place-items: center;
+  width: 8.5rem;
+  height: 8.5rem;
+  border: 1px solid var(--ink);
+  border-radius: 50%;
+  font-size: 0.6875rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  transition: color 0.5s var(--ease), background-color 0.5s var(--ease),
+    transform 0.5s var(--ease);
+}
+
+.enter:hover,
+.enter:focus-visible {
+  background: var(--ink);
+  color: var(--paper);
+  transform: scale(1.06);
+}
+
+/* ---- 第一页 / landing：单张 intro.png 满屏 + 视差 -------------- */
+
+/* 三角形蒙版之外露出的是这块深色底，不是纸色
+   what shows outside the triangle knockout */
+body.is-cover {
+  background: var(--void);
+  overflow: hidden;
+}
+
+.cover {
+  position: relative;
+  min-height: 100svh;
+  overflow: hidden;
+}
+
+/* ---- Backdrop: Parallax（对应 Cargo 的视差背景）---------------- */
+
+/* Clip when scrolling: On → fixed，背景不随页面滚动
+   蒙版由 backdrop.js 按容器像素生成 / mask is generated in JS */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+/* 7 个倾斜的平面，尺寸和变形都由 backdrop.js 算出来
+   the N layer planes; size + matrix come from backdrop.js */
+.parallax-layer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  overflow: hidden;
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+
+/* 平面里的照片：反向 skew + rotate 把变形抵消，照片保持不歪
+   the photo inside, counter-transformed so the bitmap stays upright */
+.parallax-tile {
+  position: absolute;
+  inset: 0;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  transform-origin: 50% 50%;
+}
+
+.backdrop-overlay {
+  position: absolute;
+  inset: 0;
+}
+
+/* ---- 4. 悬浮前景 / foreground -------------------------------- */
+
+/* 左上角的胶囊按钮：整个第一页唯一的交互入口。
+   position: fixed + 高 z-index，完全脱离背景的倾斜与视差位移。
+   the one interactive node — pinned, never touched by the parallax */
+.cover-badge {
+  position: fixed;
+  top: clamp(1.25rem, 3.5vw, 2.25rem);
+  left: clamp(1.25rem, 3.5vw, 2.25rem);
+  z-index: 50;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55em;
+  padding: 0.62rem 1.2rem;
+
+  border: 1px solid var(--edge);
+  border-radius: 999px;
+
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--edge);
+
+  transition: color 0.45s var(--ease), background-color 0.45s var(--ease),
+    border-color 0.45s var(--ease);
+}
+
+.cover-badge:hover,
+.cover-badge:focus-visible {
+  background: var(--edge);
+  color: var(--void);
+}
+
+.cover-badge-glyph {
+  font-size: 0.9em;
+  opacity: 0.75;
+}
+
+/* ---- Intro 页 / intro（等 Cargo 的设计迁过来）------------------ */
+
+.stage {
+  display: grid;
+  place-items: center;
+  min-height: 100svh;
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+
+.stage-inner {
+  display: grid;
+  justify-items: center;
+  gap: 2.75rem;
+}
+
+/* ---- 页面外壳 / page shell ------------------------------------ */
+
+.shell {
+  max-width: var(--page);
+  margin-inline: auto;
+  padding: 2rem 1.5rem 6rem;
+}
+
+.topbar {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.back {
+  font-size: 0.6875rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  transition: color 0.3s var(--ease);
+}
+
+.back:hover {
+  color: var(--accent);
+}
+
+.page-head {
+  padding: clamp(3rem, 10vw, 6rem) 0 clamp(2rem, 6vw, 4rem);
+}
+
+.page-head .lede {
+  margin-top: 1.25rem;
+}
+
+/* ---- Outline 页的两个大圆 / hub circles ----------------------- */
+
+.hubs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: clamp(3rem, 8vw, 6rem);
+  align-items: start;
+  padding: clamp(2rem, 8vw, 5rem) 0;
+}
+
+.hub {
+  display: grid;
+  justify-items: center;
+  gap: 1.25rem;
+  text-align: center;
+  animation: rise 0.9s var(--ease) backwards;
+  animation-delay: calc(var(--i) * 0.12s);
+}
+
+.hub-disc {
+  width: min(22rem, 62vw);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background-position: center;
+  background-size: cover;
+  box-shadow: 0 1.5rem 3rem rgba(28, 26, 23, 0.18);
+  transition: transform 0.7s var(--ease), box-shadow 0.7s var(--ease);
+}
+
+.hub:hover .hub-disc,
+.hub:focus-visible .hub-disc {
+  transform: scale(1.04) rotate(-1.5deg);
+  box-shadow: 0 2rem 4rem rgba(28, 26, 23, 0.26);
+}
+
+.hub-title {
+  font-family: var(--serif);
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  line-height: 1.1;
+}
+
+.hub-meta {
+  font-size: 0.6875rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+/* ---- 展厅网格 / gallery grid ---------------------------------- */
+
+/* 数组里每多一项就自动多一个格子，布局不用改
+   one more array item = one more cell, no layout edits */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+  gap: clamp(2rem, 5vw, 3.5rem) clamp(1.5rem, 4vw, 3rem);
+}
+
+.node {
+  display: grid;
+  justify-items: center;
+  gap: 0.9rem;
+  text-align: center;
+  animation: rise 0.7s var(--ease) backwards;
+  animation-delay: calc(var(--i) * 0.06s);
+}
+
+/* 交错错位，做出拼贴感 / stagger for the collage feel */
+.node:nth-child(even) {
+  margin-top: clamp(1rem, 4vw, 3rem);
+}
+
+.node-disc {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background-position: center;
+  background-size: cover;
+  box-shadow: 0 1rem 2rem rgba(28, 26, 23, 0.14);
+  transition: transform 0.6s var(--ease), box-shadow 0.6s var(--ease);
+}
+
+.node:hover .node-disc,
+.node:focus-visible .node-disc {
+  transform: scale(1.05) rotate(2deg);
+  box-shadow: 0 1.75rem 3rem rgba(28, 26, 23, 0.22);
+}
+
+.node-title {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  line-height: 1.25;
+}
+
+.node-meta {
+  font-size: 0.625rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.empty {
+  color: var(--ink-soft);
+}
+
+/* 没有图片时的占位色块 / placeholder when image is missing */
+.is-empty {
+  background-image: linear-gradient(
+    var(--seed, 40deg),
+    #cfc6b6,
+    #a9b0a2 55%,
+    #7c8a86
+  );
+}
+
+/* ---- 详情浮层 / detail overlay -------------------------------- */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  background: rgba(20, 18, 16, 0.55);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s var(--ease), visibility 0.4s var(--ease);
+}
+
+.overlay.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.overlay-panel {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+  width: min(30rem, 100%);
+  max-height: 86svh;
+  overflow-y: auto;
+  padding: 3rem 2rem 2.5rem;
+  background: var(--paper);
+  text-align: center;
+  transform: translateY(1rem);
+  transition: transform 0.5s var(--ease);
+}
+
+.overlay.is-open .overlay-panel {
+  transform: none;
+}
+
+.overlay-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 1rem;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--ink-soft);
+}
+
+.overlay-disc {
+  width: 12rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background-position: center;
+  background-size: cover;
+}
+
+.overlay-title {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: 1.75rem;
+  line-height: 1.15;
+}
+
+.overlay-meta {
+  font-size: 0.625rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.overlay-text {
+  color: var(--ink-soft);
+}
+
+.overlay-link {
+  font-size: 0.6875rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 0.15rem;
+}
+
+/* ---- footer --------------------------------------------------- */
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: clamp(4rem, 12vw, 8rem);
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule);
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+}
+
+/* ---- motion --------------------------------------------------- */
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
