@@ -39,10 +39,15 @@ a {
   --rule: rgba(28, 26, 23, 0.14);
   --accent: #b4442c;
 
-  /* 第一页专用：深色底衬托冰晶图与浅灰紫胶囊
-     cover page only — the dark ground the lavender capsule sits on */
-  --void: #16151b;
-  --edge: #c6c4d6;
+  /* 第一页专用。底色改成亮的：冰晶纹理本身就是高光通透的，
+     压一层深灰只会把光泽全灭掉。
+     cover page only — light ground; a dark wash killed the sheen */
+  --void: var(--paper);
+
+  /* 胶囊边框。原本的 #c6c4d6 是配深色底的，放到亮底上几乎看不见，
+     所以加深到同色系的灰紫。要回到浅色改这一个值。
+     was #c6c4d6 for the dark ground; unreadable on a light one */
+  --edge: #4a4658;
 
   --serif: "Times New Roman", Times, Georgia, serif;
   --sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -130,8 +135,10 @@ body::after {
 
 /* ---- 第一页 / landing：单张 intro.png 满屏 + 视差 -------------- */
 
-/* 三角形蒙版之外露出的是这块深色底，不是纸色
-   what shows outside the triangle knockout */
+/* 亮底。底图和 7 层平铺图层几乎盖满整个视口，这块底色只在极少数
+   缝隙里露出来，不能是深色 —— 深色会把整页的通透感压掉。
+   light ground: the image covers nearly everything, and a dark
+   fallback was what made the page read as dimmed */
 body.is-cover {
   background: var(--void);
   overflow: hidden;
@@ -147,37 +154,82 @@ body.is-cover {
 
 /* Clip when scrolling: On → fixed，背景不随页面滚动
    蒙版由 backdrop.js 按容器像素生成 / mask is generated in JS */
+/* §1 视口容器：fixed + inset 0 == 100vw × 100vh，随窗口自动缩放
+   the viewport container — resize is re-measured in backdrop.js */
 .backdrop {
   position: fixed;
   inset: 0;
   z-index: 0;
   overflow: hidden;
-  -webkit-mask-size: 100% 100%;
-  mask-size: 100% 100%;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
 }
 
-/* 7 个倾斜的平面，尺寸和变形都由 backdrop.js 算出来
-   the N layer planes; size + matrix come from backdrop.js */
-.parallax-layer {
+/* 视频背景：铺满视口，object-fit: cover 保证任何窗口比例都不留黑边。
+   静音 + autoplay + playsinline 是浏览器允许自动播放的必要条件。
+   the moving backdrop — muted autoplay is what browsers allow to start on its own */
+.backdrop-video {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  overflow: hidden;
-  transform-origin: 50% 50%;
-  will-change: transform;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  pointer-events: none;
 }
 
-/* 平面里的照片：反向 skew + rotate 把变形抵消，照片保持不歪
-   the photo inside, counter-transformed so the bitmap stays upright */
-.parallax-tile {
+/* 用户系统里关掉了动效：不播视频，只留 poster 静帧
+   reduced motion — hold the poster frame instead of playing */
+@media (prefers-reduced-motion: reduce) {
+  .backdrop-video {
+    display: none;
+  }
+
+  .backdrop {
+    background: url("assets/video/cover-poster.jpg") center / cover no-repeat;
+  }
+}
+
+/* 底层图像：整页铺满，不带旋转倾斜，不被裁切
+   the full-bleed base — outside the knockout, this is what fills the page */
+.backdrop-base {
   position: absolute;
   inset: 0;
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
   transform-origin: 50% 50%;
+  will-change: transform;
+}
+
+/* 三角形 knockout：原生 CSS clip-path: polygon()，顶点用 vw/vh/vmin
+   表达，视口一变就自动跟着变，硬边无羽化，不需要 JS 重算
+   native clip-path in viewport units — responsive with zero JS */
+.backdrop-cut {
+  position: absolute;
+  inset: 0;
+}
+
+/* 尺寸与居中由 backdrop.js 算好写在 left/top/width/height 上，
+   transform 只承载视差位移 + rotate/skew
+   transform carries only the parallax; geometry lives in left/top */
+.parallax-layer {
+  position: absolute;
+  overflow: hidden;
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+
+/* 平面里的瓷砖：无限平铺的贴图网格。
+   inset / background-size 由 backdrop.js 按 CONFIG.tileSize 写入，
+   四周各多出一个瓷砖的余量，滑动一个周期也不会露出图层的底。
+   贴图跟着图层一起被 rotate/skew —— 平铺是无限的，斜切不会造成断裂。
+   the tile grid: repeats forever, so shearing it never breaks an edge */
+.parallax-tile {
+  position: absolute;
+  inset: 0;
+  background-repeat: repeat;
+  background-origin: padding-box;
+  transform-origin: 50% 50%;
+  will-change: background-position;
 }
 
 .backdrop-overlay {
@@ -187,9 +239,14 @@ body.is-cover {
 
 /* ---- 4. 悬浮前景 / foreground -------------------------------- */
 
-/* 左上角的胶囊按钮：整个第一页唯一的交互入口。
-   position: fixed + 高 z-index，完全脱离背景的倾斜与视差位移。
-   the one interactive node — pinned, never touched by the parallax */
+/* §4 前景 UI：position: fixed + 最高 z-index，完全脱离背景的
+   倾斜、透视与视差位移。规范里管它叫 .button-4。
+   the one interactive node — pinned above, never touched by the parallax */
+.button-4 {
+  position: fixed;
+  z-index: 90;
+}
+
 .cover-badge {
   position: fixed;
   top: clamp(1.25rem, 3.5vw, 2.25rem);
