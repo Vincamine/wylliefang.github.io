@@ -1,6 +1,5 @@
 <!doctype html>
-<html lang="en">
-<head>
+<html lang="en"<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>body{margin:0}img{max-width:100%}</style>
@@ -42,8 +41,18 @@
   }
   .name{
     font-family:'Fraunces',Georgia,'Times New Roman',serif;
-    font-weight:560;font-size:clamp(26px,3.2vw,40px);letter-spacing:.01em;
+    font-weight:560;font-size:clamp(2px,1.9vw,24px);letter-spacing:.01em;
     color:var(--ink);text-shadow:0 1px 16px rgba(255,255,255,.85);
+    text-decoration:none;pointer-events:auto;
+    display:inline-block;line-height:1;
+    padding:8px 16px;border:1px solid var(--line);border-radius:999px;
+    background:rgba(255,255,255,.45);backdrop-filter:blur(6px);
+    transition:background .25s ease,color .25s ease,border-color .25s ease;
+  }
+  .name:hover,.name:focus-visible{
+    background:rgba(255,255,255,.85);
+    border-color:var(--accent);color:var(--ink);
+    box-shadow:0 0 0 4px rgba(139, 145, 233, 0.28);
   }
   .name .dot{color:var(--accent)}
   .tag{
@@ -66,7 +75,7 @@
 <canvas id="cv"></canvas>
 
 <header>
-  <div class="name">Wyllie Fang</div>
+  <a class="name" href="intro.html">Wyllie Fang</a>
   <div class="tag">Personal site</div>
 </header>
 
