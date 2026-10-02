@@ -30,8 +30,8 @@ window.portfolioData = {
 
   personal: {
     name: "Wenxue (Wyllie) Fang",
-    short: "Wyllie Fang",          // 封面胶囊按钮里的名字 / cover capsule
-    email: "zhengpri@gmail.com",
+    short: "Wyllie Fang",
+    email: "wylliefang@gmail.com",
   },
 
   /* ---- 页首的自我介绍大图 / the hero image --------------------- */
