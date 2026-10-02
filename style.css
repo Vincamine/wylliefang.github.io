@@ -110,29 +110,6 @@ body::after {
   color: var(--ink-soft);
 }
 
-/* ---- 圆形按钮 / the single round button ----------------------- */
-
-.enter {
-  display: grid;
-  place-items: center;
-  width: 8.5rem;
-  height: 8.5rem;
-  border: 1px solid var(--ink);
-  border-radius: 50%;
-  font-size: 0.6875rem;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  transition: color 0.5s var(--ease), background-color 0.5s var(--ease),
-    transform 0.5s var(--ease);
-}
-
-.enter:hover,
-.enter:focus-visible {
-  background: var(--ink);
-  color: var(--paper);
-  transform: scale(1.06);
-}
-
 /* ---- 第一页 / landing：单张 intro.png 满屏 + 视差 -------------- */
 
 /* 亮底。底图和 7 层平铺图层几乎盖满整个视口，这块底色只在极少数
@@ -282,22 +259,6 @@ body.is-cover {
   opacity: 0.75;
 }
 
-/* ---- Intro 页 / intro（等 Cargo 的设计迁过来）------------------ */
-
-.stage {
-  display: grid;
-  place-items: center;
-  min-height: 100svh;
-  padding: 3rem 1.5rem;
-  text-align: center;
-}
-
-.stage-inner {
-  display: grid;
-  justify-items: center;
-  gap: 2.75rem;
-}
-
 /* ---- 页面外壳 / page shell ------------------------------------ */
 
 .shell {
@@ -327,113 +288,371 @@ body.is-cover {
   color: var(--accent);
 }
 
-.page-head {
-  padding: clamp(3rem, 10vw, 6rem) 0 clamp(2rem, 6vw, 4rem);
-}
+/* ---- §1 自我介绍大图 / hero ----------------------------------- */
 
-.page-head .lede {
-  margin-top: 1.25rem;
-}
-
-/* ---- Outline 页的两个大圆 / hub circles ----------------------- */
-
-.hubs {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
-  gap: clamp(3rem, 8vw, 6rem);
-  align-items: start;
-  padding: clamp(2rem, 8vw, 5rem) 0;
-}
-
-.hub {
+.hero {
   display: grid;
   justify-items: center;
-  gap: 1.25rem;
-  text-align: center;
-  animation: rise 0.9s var(--ease) backwards;
-  animation-delay: calc(var(--i) * 0.12s);
+  align-content: center;
+  gap: clamp(1.5rem, 4vw, 2.5rem);
+  min-height: calc(100svh - 10rem);
+  padding: clamp(2rem, 6vw, 4rem) 0;
 }
 
-.hub-disc {
-  width: min(22rem, 62vw);
-  aspect-ratio: 1;
+/* contain 而不是 cover：这张图是有内容的，不能被裁掉
+   contain, not cover — the image carries content, never crop it */
+.hero-img {
+  width: 100%;
+  max-height: 70svh;
+  object-fit: contain;
+}
+
+.hero-cue {
+  font-size: 0.6875rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  transition: opacity 0.6s var(--ease);
+}
+
+.hero-cue::after {
+  content: " \2193";
+  display: inline-block;
+  animation: nudge 2.2s var(--ease) infinite;
+}
+
+/* 滚到树那一屏之后提示就没用了 / the cue has done its job */
+.tree-revealed .hero-cue {
+  opacity: 0;
+}
+
+/* ---- §2 树 / the tree ----------------------------------------- */
+
+/* 连线全是 .tree-item 的 ::before / ::after 画出来的，不用 JS 算坐标。
+   --stem 是每一段竖线的长度，父子两点之间的间距 = 2 × --stem。
+   All wires are pseudo-elements, no JS geometry. The gap between a
+   parent dot and its children is 2 × --stem. */
+.tree-stage {
+  --stem: clamp(1.75rem, 4vw, 2.75rem);
+  --sib: clamp(0.4rem, 2.5vw, 1.75rem);
+  --bend: 0.5rem;
+  --wire: 1px solid var(--rule);
+
+  padding: clamp(2rem, 7vw, 5rem) 0 clamp(4rem, 12vw, 8rem);
+  /* 树长宽了就横向滚，不要压扁 / wide trees scroll instead of squashing */
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+
+.tree-wrap {
+  display: flex;
+  justify-content: center;
+  min-width: max-content;
+  padding-inline: 1.5rem;
+}
+
+.tree-level {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  padding-top: var(--stem);
+  list-style: none;
+}
+
+/* 盖掉上面的 display:flex，不然 hidden 不生效
+   without this, [hidden] loses to display:flex */
+.tree-level[hidden] {
+  display: none;
+}
+
+/* 父节点下来的那一截竖线 / the stem descending from the parent */
+.tree-level::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  height: var(--stem);
+  border-left: var(--wire);
+}
+
+.tree-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--stem) var(--sib) 0;
+}
+
+/* 每个节点头上两段横线，和兄弟节点拼成一整条横杠；
+   ::after 还带着往下接到圆点的那段竖线
+   two half-bars per node join up into one bar across the siblings;
+   ::after also carries the vertical drop into the dot */
+.tree-item::before,
+.tree-item::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: var(--stem);
+  border-top: var(--wire);
+}
+
+.tree-item::before {
+  right: 50%;
+}
+
+.tree-item::after {
+  left: 50%;
+  border-left: var(--wire);
+}
+
+/* 两端的节点：外侧那半段不画，内侧拐个圆角
+   the end nodes drop their outer half and round the corner */
+.tree-item:first-child::before,
+.tree-item:last-child::after {
+  border: 0;
+}
+
+.tree-item:first-child::after {
+  border-radius: var(--bend) 0 0 0;
+}
+
+.tree-item:last-child::before {
+  border-right: var(--wire);
+  border-radius: 0 var(--bend) 0 0;
+}
+
+/* 独生子：不需要横杠，父节点的竖线直接接下来
+   an only child needs no bar, the parent stem reaches it already */
+.tree-item:only-child::before,
+.tree-item:only-child::after {
+  display: none;
+}
+
+/* 树根上面什么都没有 / nothing hangs above the root */
+.tree-root,
+.tree-root > .tree-item {
+  padding-top: 0;
+}
+
+.tree-root::before,
+.tree-root > .tree-item::before,
+.tree-root > .tree-item::after {
+  display: none;
+}
+
+/* ---- 圆点组件 / the dot component ----------------------------- */
+
+/* 一个 .dot 就是一个圆。改 --size 就改大小。
+   标签是绝对定位的，所以它再长也不会把连线挤歪。
+   One .dot = one circle; --size is its diameter. The label is
+   absolutely positioned so its width can never shift the wires. */
+.dot {
+  --size: 4.75rem;
+  position: relative;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.dot.is-root {
+  --size: 8.5rem;
+}
+
+.dot.is-branch {
+  --size: 6.5rem;
+}
+
+.dot-disc {
+  display: block;
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
   background-position: center;
   background-size: cover;
-  box-shadow: 0 1.5rem 3rem rgba(28, 26, 23, 0.18);
-  transition: transform 0.7s var(--ease), box-shadow 0.7s var(--ease);
+  box-shadow: 0 0.75rem 1.75rem rgba(28, 26, 23, 0.16);
+  transition: transform 0.6s var(--ease), box-shadow 0.6s var(--ease),
+    background-color 0.5s var(--ease);
 }
 
-.hub:hover .hub-disc,
-.hub:focus-visible .hub-disc {
-  transform: scale(1.04) rotate(-1.5deg);
-  box-shadow: 0 2rem 4rem rgba(28, 26, 23, 0.26);
+.dot:hover .dot-disc,
+.dot:focus-visible .dot-disc {
+  transform: scale(1.06) rotate(-2deg);
+  box-shadow: 0 1.25rem 2.5rem rgba(28, 26, 23, 0.26);
 }
 
-.hub-title {
+/* 展开中的节点：描一圈 accent 色的环 / open nodes get an accent ring */
+.dot.is-open .dot-disc {
+  box-shadow: 0 0 0 0.2rem var(--paper), 0 0 0 calc(0.2rem + 1px) var(--accent),
+    0 0.75rem 1.75rem rgba(28, 26, 23, 0.16);
+}
+
+/* 圆点下面的文字 / the label under the circle */
+.dot-text {
+  position: absolute;
+  top: calc(100% + 0.6rem);
+  left: 50%;
+  transform: translateX(-50%);
+  display: grid;
+  gap: 0.15rem;
+  width: max-content;
+  max-width: 10rem;
+  text-align: center;
+  pointer-events: none;
+}
+
+.dot-label {
   font-family: var(--serif);
-  font-size: clamp(1.75rem, 4vw, 2.5rem);
-  line-height: 1.1;
+  font-size: 1.05rem;
+  line-height: 1.2;
 }
 
-.hub-meta {
+.dot-meta {
+  font-size: 0.5625rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+/* 树根是空心圆，字写在圆里面 / the root is an outline, label inside */
+.dot.is-root .dot-disc {
+  background: transparent;
+  border: 1px solid var(--ink);
+  box-shadow: none;
+}
+
+.dot.is-root .dot-text {
+  inset: 0;
+  top: 0;
+  left: 0;
+  transform: none;
+  place-content: center;
+  width: auto;
+  max-width: none;
+}
+
+.dot.is-root .dot-label {
+  font-family: var(--sans);
   font-size: 0.6875rem;
   letter-spacing: 0.28em;
   text-transform: uppercase;
-  color: var(--ink-soft);
+  transition: color 0.5s var(--ease);
 }
 
-/* ---- 展厅网格 / gallery grid ---------------------------------- */
+.dot.is-root:hover .dot-disc,
+.dot.is-root:focus-visible .dot-disc {
+  background: var(--ink);
+  transform: scale(1.05);
+  box-shadow: none;
+}
 
-/* 数组里每多一项就自动多一个格子，布局不用改
-   one more array item = one more cell, no layout edits */
-.gallery {
+.dot.is-root:hover .dot-label,
+.dot.is-root:focus-visible .dot-label {
+  color: var(--paper);
+}
+
+.dot.is-root.is-open .dot-disc {
+  background: var(--ink);
+  border-color: var(--ink);
+}
+
+.dot.is-root.is-open .dot-label {
+  color: var(--paper);
+}
+
+/* + / − 角标：只有能展开的点才有 / only on dots that open */
+.dot-cue {
+  position: absolute;
+  right: -0.15rem;
+  bottom: -0.15rem;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
-  gap: clamp(2rem, 5vw, 3.5rem) clamp(1.5rem, 4vw, 3rem);
-}
-
-.node {
-  display: grid;
-  justify-items: center;
-  gap: 0.9rem;
-  text-align: center;
-  animation: rise 0.7s var(--ease) backwards;
-  animation-delay: calc(var(--i) * 0.06s);
-}
-
-/* 交错错位，做出拼贴感 / stagger for the collage feel */
-.node:nth-child(even) {
-  margin-top: clamp(1rem, 4vw, 3rem);
-}
-
-.node-disc {
-  width: 100%;
-  aspect-ratio: 1;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 1px solid var(--rule);
   border-radius: 50%;
-  background-position: center;
-  background-size: cover;
-  box-shadow: 0 1rem 2rem rgba(28, 26, 23, 0.14);
-  transition: transform 0.6s var(--ease), box-shadow 0.6s var(--ease);
-}
-
-.node:hover .node-disc,
-.node:focus-visible .node-disc {
-  transform: scale(1.05) rotate(2deg);
-  box-shadow: 0 1.75rem 3rem rgba(28, 26, 23, 0.22);
-}
-
-.node-title {
-  font-family: var(--serif);
-  font-size: 1.15rem;
-  line-height: 1.25;
-}
-
-.node-meta {
-  font-size: 0.625rem;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
+  background: var(--paper);
+  font-size: 0.8rem;
+  line-height: 1;
   color: var(--ink-soft);
+  transition: color 0.4s var(--ease), border-color 0.4s var(--ease);
+}
+
+.dot-cue::before {
+  content: "+";
+}
+
+.dot.is-open .dot-cue {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.dot.is-open .dot-cue::before {
+  content: "\2212";
+}
+
+.dot.is-root .dot-cue {
+  right: 0.35rem;
+  bottom: 0.35rem;
+}
+
+/* ---- 生长动画 / the growing ----------------------------------- */
+
+/* 一层从 display:none 变回 flex 的时候动画会重新跑一遍，
+   所以每次展开都会重新"长"出来
+   animations restart when a level leaves display:none, so each
+   expand re-grows */
+.tree-level:not(.tree-root):not([hidden]) {
+  animation: wires 0.7s var(--ease) backwards;
+}
+
+.tree-level:not(.tree-root):not([hidden]) > .tree-item > .dot {
+  animation: sprout 0.6s var(--ease) backwards;
+  animation-delay: calc(var(--i) * 0.09s + 0.1s);
+}
+
+@keyframes wires {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes sprout {
+  from {
+    opacity: 0;
+    transform: translateY(-0.9rem) scale(0.5);
+  }
+}
+
+@keyframes nudge {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(0.3rem);
+  }
+}
+
+/* start 圆要等滚到这一屏才浮出来。armed 这个类是 JS 加的，
+   所以没有 JS 的时候圆点本来就是可见的。
+   the root dot waits for the scroll. "armed" is added by JS only,
+   so with JS off the dot is simply visible from the start. */
+.tree-armed .tree-root > .tree-item > .dot {
+  opacity: 0;
+  transform: translateY(1.25rem);
+}
+
+.tree-revealed .tree-root > .tree-item > .dot {
+  animation: reveal 0.9s var(--ease) forwards;
+}
+
+@keyframes reveal {
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .empty {

@@ -9,21 +9,9 @@ first page with one button -> intro page with one button -> outline page with ou
 
 ## 🚀 Quick Start
 
-### Install Dependencies
-```bash
-npm install
+### Preview
 ```
-
-### Development
-```bash
-npm run dev
-```
-Visit: http://localhost:3000
-
-### Production Build
-```bash
-npm run build
-npm start
+npx serve .
 ```
 
 ## 🎨 Design System
