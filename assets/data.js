@@ -29,7 +29,7 @@ window.portfolioData = {
   /* ---- 个人信息 / personal ------------------------------------- */
 
   personal: {
-    name: "Wenxue (Wyllie) Fang",
+    name: "Wyllie Fang",
     short: "Wyllie Fang",
     email: "wylliefang@gmail.com",
   },
@@ -38,7 +38,7 @@ window.portfolioData = {
 
   intro: {
     image: "assets/images/self-intro.png",
-    alt: "Wenxue (Wyllie) Fang — self introduction",
+    alt: "Wyllie Fang — self introduction",
   },
 
   /* ---- 树根 / the root dot ------------------------------------- */
