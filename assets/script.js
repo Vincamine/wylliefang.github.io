@@ -1,5 +1,5 @@
 /* ===================================================================
- * script.js — 渲染逻辑，通常不需要修改 / rendering logic
+ * script.js — rendering logic
  *
  * 从 window.portfolioData 读出那棵树，生成嵌套的 <ul>/<li>。
  * 连线是纯 CSS 画的（style.css 里 .tree-item 的 ::before / ::after），
@@ -50,8 +50,7 @@
     dot.type = "button";
 
     var disc = el("span", "dot-disc");
-    /* 根节点是空心圆，不需要底图 / the root is an outline, no image */
-    if (variant !== "is-root") paintDisc(disc, item.icon, seed);
+    paintDisc(disc, item.icon, seed);
     dot.appendChild(disc);
 
     var text = el("span", "dot-text");
@@ -67,11 +66,6 @@
   function wire(dot, list) {
     dot.classList.add("has-kids");
     dot.setAttribute("aria-expanded", "false");
-
-    /* 加 / − 角标，告诉人这个点可以展开 / the +/− affordance */
-    var cue = el("span", "dot-cue");
-    cue.setAttribute("aria-hidden", "true");
-    dot.appendChild(cue);
 
     dot.addEventListener("click", function () {
       var wasOpen = dot.getAttribute("aria-expanded") === "true";

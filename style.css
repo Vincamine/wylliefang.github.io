@@ -49,10 +49,18 @@ a {
      was #c6c4d6 for the dark ground; unreadable on a light one */
   --edge: #4a4658;
 
-  --serif: "Times New Roman", Times, Georgia, serif;
-  --sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  /* 整站只用 Azeret Mono 一种字（封面页也是这个）。
+     --serif / --sans 两个名字留着不动，这样下面 5 处用法都不用改；
+     以后想换回衬线 / 无衬线，只改这三行就行。
+     One typeface for the whole site. The --serif / --sans names are
+     kept pointing at it so none of the 5 usages below need editing —
+     to go back to a serif/sans pair, change only these three lines. */
+  --mono: "Azeret Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --serif: var(--mono);
+  --sans: var(--mono);
 
   --page: 68rem;
+  --corner: 0.625rem;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -301,8 +309,19 @@ body.is-cover {
 
 /* contain 而不是 cover：这张图是有内容的，不能被裁掉
    contain, not cover — the image carries content, never crop it */
+.hero-frame {
+  display: inline-flex;
+  max-width: 100%;
+  max-height: 70svh;
+  overflow: hidden;
+  border-radius: var(--corner);
+  clip-path: inset(0 round var(--corner));
+}
+
 .hero-img {
-  width: 100%;
+  width: auto;
+  max-width: 100%;
+  height: auto;
   max-height: 70svh;
   object-fit: contain;
 }
@@ -335,7 +354,7 @@ body.is-cover {
 .tree-stage {
   --stem: clamp(1.75rem, 4vw, 2.75rem);
   --sib: clamp(0.4rem, 2.5vw, 1.75rem);
-  --bend: 0.5rem;
+  --bend: var(--corner);
   --wire: 1px solid var(--rule);
 
   padding: clamp(2rem, 7vw, 5rem) 0 clamp(4rem, 12vw, 8rem);
@@ -429,6 +448,80 @@ body.is-cover {
   display: none;
 }
 
+/* Career / Hobby 的子节点改为纵向清单。
+   连接线停在图片外侧，再用短横线接入节点，避免穿过图片和文字。
+   The children form a vertical timeline whose wires stay clear of
+   both the thumbnails and their labels. */
+.tree-depth-2,
+.tree-root > .tree-item > .tree-level > .tree-item > .tree-level {
+  --leaf-size: 4.75rem;
+  --spine-x: 1rem;
+  --leaf-indent: 2.75rem;
+
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2rem;
+  width: clamp(14rem, 22vw, 18rem);
+  padding-top: calc(var(--stem) * 2);
+}
+
+.tree-depth-2::before,
+.tree-root > .tree-item > .tree-level > .tree-item > .tree-level::before {
+  top: var(--stem);
+  bottom: calc(var(--leaf-size) / 2 + var(--bend));
+  left: var(--spine-x);
+  height: auto;
+}
+
+/* 从 Career / Hobby 圆点的 9 点钟方向出发，再弯向下面的主干。 */
+.tree-depth-2::after,
+.tree-root > .tree-item > .tree-level > .tree-item > .tree-level::after {
+  content: "";
+  position: absolute;
+  top: -3.25rem;
+  left: var(--spine-x);
+  width: calc(50% - 3.25rem - var(--spine-x));
+  height: calc(3.25rem + var(--stem));
+  border-top: var(--wire);
+  border-left: var(--wire);
+  border-radius: var(--bend) 0 0 0;
+}
+
+.tree-depth-2 > .tree-item,
+.tree-root > .tree-item > .tree-level > .tree-item > .tree-level > .tree-item {
+  align-items: flex-start;
+  width: 100%;
+  padding: 0 0 0 var(--leaf-indent);
+}
+
+.tree-depth-2 > .tree-item::before,
+.tree-root > .tree-item > .tree-level > .tree-item > .tree-level > .tree-item::before {
+  display: block;
+  top: calc(var(--leaf-size) / 2 - var(--bend));
+  left: var(--spine-x);
+  width: calc(var(--leaf-indent) - var(--spine-x));
+  height: var(--bend);
+  border: 0;
+  border-left: var(--wire);
+  border-bottom: var(--wire);
+  border-radius: 0 0 0 var(--bend);
+}
+
+.tree-depth-2 > .tree-item::after,
+.tree-root > .tree-item > .tree-level > .tree-item > .tree-level > .tree-item::after {
+  display: none;
+}
+
+/* 叶子文字放在圆点右边，线永远不会穿字。 */
+.tree-depth-2 .dot.is-leaf .dot-text,
+.tree-root > .tree-item > .tree-level > .tree-item > .tree-level .dot.is-leaf .dot-text {
+  top: 50%;
+  left: calc(100% + 1rem);
+  transform: translateY(-50%);
+  width: clamp(7rem, 11vw, 10rem);
+  text-align: left;
+}
+
 /* 树根上面什么都没有 / nothing hangs above the root */
 .tree-root,
 .tree-root > .tree-item {
@@ -504,8 +597,11 @@ body.is-cover {
 
 .dot-label {
   font-family: var(--serif);
-  font-size: 1.05rem;
-  line-height: 1.2;
+  /* 等宽字比衬线字宽出一截，标签在树上挨得近，所以比原来小一号
+     mono runs wider than the old serif; the labels sit close
+     together on the tree, so this is a step down from 1.05rem */
+  font-size: 0.9rem;
+  line-height: 1.25;
 }
 
 .dot-meta {
@@ -517,7 +613,7 @@ body.is-cover {
 
 /* 树根是空心圆，字写在圆里面 / the root is an outline, label inside */
 .dot.is-root .dot-disc {
-  background: transparent;
+  background-color: transparent;
   border: 1px solid var(--ink);
   box-shadow: none;
 }
@@ -542,59 +638,22 @@ body.is-cover {
 
 .dot.is-root:hover .dot-disc,
 .dot.is-root:focus-visible .dot-disc {
-  background: var(--ink);
   transform: scale(1.05);
   box-shadow: none;
 }
 
 .dot.is-root:hover .dot-label,
 .dot.is-root:focus-visible .dot-label {
-  color: var(--paper);
+  color: var(--ink);
 }
 
 .dot.is-root.is-open .dot-disc {
-  background: var(--ink);
-  border-color: var(--ink);
-}
-
-.dot.is-root.is-open .dot-label {
-  color: var(--paper);
-}
-
-/* + / − 角标：只有能展开的点才有 / only on dots that open */
-.dot-cue {
-  position: absolute;
-  right: -0.15rem;
-  bottom: -0.15rem;
-  display: grid;
-  place-items: center;
-  width: 1.5rem;
-  height: 1.5rem;
-  border: 1px solid var(--rule);
-  border-radius: 50%;
-  background: var(--paper);
-  font-size: 0.8rem;
-  line-height: 1;
-  color: var(--ink-soft);
-  transition: color 0.4s var(--ease), border-color 0.4s var(--ease);
-}
-
-.dot-cue::before {
-  content: "+";
-}
-
-.dot.is-open .dot-cue {
-  color: var(--accent);
+  background-color: transparent;
   border-color: var(--accent);
 }
 
-.dot.is-open .dot-cue::before {
-  content: "\2212";
-}
-
-.dot.is-root .dot-cue {
-  right: 0.35rem;
-  bottom: 0.35rem;
+.dot.is-root.is-open .dot-label {
+  color: var(--ink);
 }
 
 /* ---- 生长动画 / the growing ----------------------------------- */

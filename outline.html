@@ -5,7 +5,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Outline — Wyllie Fang</title>
-  <link rel="stylesheet" href="style.css">
+
+  <!-- Azeret Mono：和封面页用的是同一套字，两页才像同一个站
+       same webfont as the cover page, so the two pages match -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;500&display=swap">
+
+  <link rel="stylesheet" href="style.css?v=20261007-11">
 </head>
 
 <body>
@@ -19,7 +27,9 @@
 
     <!-- §1 自我介绍大图 / hero -->
     <section class="hero">
-      <img class="hero-img" alt="" data-intro-img>
+      <div class="hero-frame">
+        <img class="hero-img" alt="" data-intro-img>
+      </div>
       <p class="hero-cue" aria-hidden="true">Scroll</p>
     </section>
 
@@ -35,8 +45,8 @@
 
   </div>
 
-  <script src="assets/data.js"></script>
-  <script src="assets/script.js"></script>
+  <script src="assets/data.js?v=20261007-3"></script>
+  <script src="assets/script.js?v=20261007-5"></script>
 
 </body>
 
