@@ -39,22 +39,21 @@ a {
   --rule: rgba(28, 26, 23, 0.14);
   --accent: #b4442c;
 
-  /* 第一页专用。底色改成亮的：冰晶纹理本身就是高光通透的，
-     压一层深灰只会把光泽全灭掉。
-     cover page only — light ground; a dark wash killed the sheen */
+  /* Cover page only. The ground is light on purpose: the ice-crystal
+     texture is glossy and translucent by itself, and laying a dark
+     grey wash under it killed the sheen completely. */
   --void: var(--paper);
 
-  /* 胶囊边框。原本的 #c6c4d6 是配深色底的，放到亮底上几乎看不见，
-     所以加深到同色系的灰紫。要回到浅色改这一个值。
-     was #c6c4d6 for the dark ground; unreadable on a light one */
+  /* The capsule border. This was #c6c4d6 back when the ground was
+     dark; on a light ground it was almost invisible, so it is
+     deepened to a grey-violet in the same family. Change this one
+     value to go back to a lighter border. */
   --edge: #4a4658;
 
-  /* 整站只用 Azeret Mono 一种字（封面页也是这个）。
-     --serif / --sans 两个名字留着不动，这样下面 5 处用法都不用改；
-     以后想换回衬线 / 无衬线，只改这三行就行。
-     One typeface for the whole site. The --serif / --sans names are
-     kept pointing at it so none of the 5 usages below need editing —
-     to go back to a serif/sans pair, change only these three lines. */
+  /* One typeface for the whole site, Azeret Mono — the cover page
+     uses it too. The --serif / --sans names are kept pointing at it
+     so none of the 5 usages below need editing; to go back to a
+     serif/sans pair, change only these three lines. */
   --mono: "Azeret Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
   --serif: var(--mono);
   --sans: var(--mono);
@@ -84,7 +83,7 @@ body.is-locked {
   overflow: hidden;
 }
 
-/* 纸张颗粒 / paper grain */
+/* Paper grain. */
 body::after {
   content: "";
   position: fixed;
@@ -95,7 +94,7 @@ body::after {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* ---- 通用文字 / shared type ----------------------------------- */
+/* ---- Shared type ---------------------------------------------- */
 
 .eyebrow {
   font-size: 0.6875rem;
@@ -118,12 +117,12 @@ body::after {
   color: var(--ink-soft);
 }
 
-/* ---- 第一页 / landing：单张 intro.png 满屏 + 视差 -------------- */
+/* ---- Cover page: one full-screen intro.png plus parallax ------ */
 
-/* 亮底。底图和 7 层平铺图层几乎盖满整个视口，这块底色只在极少数
-   缝隙里露出来，不能是深色 —— 深色会把整页的通透感压掉。
-   light ground: the image covers nearly everything, and a dark
-   fallback was what made the page read as dimmed */
+/* A light ground. The base image and its 7 tiled layers cover nearly
+   the whole viewport, so this color shows through only in a few
+   slivers — but it still must not be dark. A dark fallback was
+   exactly what made the whole page read as dimmed. */
 body.is-cover {
   background: var(--void);
   overflow: hidden;
@@ -135,12 +134,13 @@ body.is-cover {
   overflow: hidden;
 }
 
-/* ---- Backdrop: Parallax（对应 Cargo 的视差背景）---------------- */
+/* ---- Backdrop: parallax (the Cargo parallax background) ------- */
 
-/* Clip when scrolling: On → fixed，背景不随页面滚动
-   蒙版由 backdrop.js 按容器像素生成 / mask is generated in JS */
-/* §1 视口容器：fixed + inset 0 == 100vw × 100vh，随窗口自动缩放
-   the viewport container — resize is re-measured in backdrop.js */
+/* Clip when scrolling: On → fixed, so the backdrop does not scroll
+   with the page. The mask is generated in backdrop.js from the
+   container's pixel size. */
+/* §1 The viewport container: fixed + inset 0 == 100vw × 100vh, which
+   rescales with the window; resizes are re-measured in backdrop.js. */
 .backdrop {
   position: fixed;
   inset: 0;
@@ -148,9 +148,10 @@ body.is-cover {
   overflow: hidden;
 }
 
-/* 视频背景：铺满视口，object-fit: cover 保证任何窗口比例都不留黑边。
-   静音 + autoplay + playsinline 是浏览器允许自动播放的必要条件。
-   the moving backdrop — muted autoplay is what browsers allow to start on its own */
+/* The moving backdrop: fills the viewport, and object-fit: cover
+   guarantees no black bars at any window ratio. Muted + autoplay +
+   playsinline are the conditions browsers require before they will
+   start playback on their own. */
 .backdrop-video {
   position: absolute;
   inset: 0;
@@ -161,8 +162,8 @@ body.is-cover {
   pointer-events: none;
 }
 
-/* 用户系统里关掉了动效：不播视频，只留 poster 静帧
-   reduced motion — hold the poster frame instead of playing */
+/* Reduced motion is set at the OS level: do not play the video,
+   hold the poster still frame instead. */
 @media (prefers-reduced-motion: reduce) {
   .backdrop-video {
     display: none;
@@ -173,8 +174,9 @@ body.is-cover {
   }
 }
 
-/* 底层图像：整页铺满，不带旋转倾斜，不被裁切
-   the full-bleed base — outside the knockout, this is what fills the page */
+/* The full-bleed base: covers the whole page with no rotation, no
+   skew and no cropping. Outside the knockout, this is what fills
+   the page. */
 .backdrop-base {
   position: absolute;
   inset: 0;
@@ -185,17 +187,18 @@ body.is-cover {
   will-change: transform;
 }
 
-/* 三角形 knockout：原生 CSS clip-path: polygon()，顶点用 vw/vh/vmin
-   表达，视口一变就自动跟着变，硬边无羽化，不需要 JS 重算
-   native clip-path in viewport units — responsive with zero JS */
+/* The triangular knockout: a native CSS clip-path: polygon() whose
+   vertices are expressed in vw/vh/vmin, so it follows the viewport
+   automatically. Hard edges, no feathering, nothing for JS to
+   recompute. */
 .backdrop-cut {
   position: absolute;
   inset: 0;
 }
 
-/* 尺寸与居中由 backdrop.js 算好写在 left/top/width/height 上，
-   transform 只承载视差位移 + rotate/skew
-   transform carries only the parallax; geometry lives in left/top */
+/* backdrop.js computes size and centering and writes them onto
+   left/top/width/height; transform carries only the parallax offset
+   plus rotate/skew. Geometry lives in left/top, never in transform. */
 .parallax-layer {
   position: absolute;
   overflow: hidden;
@@ -203,11 +206,12 @@ body.is-cover {
   will-change: transform;
 }
 
-/* 平面里的瓷砖：无限平铺的贴图网格。
-   inset / background-size 由 backdrop.js 按 CONFIG.tileSize 写入，
-   四周各多出一个瓷砖的余量，滑动一个周期也不会露出图层的底。
-   贴图跟着图层一起被 rotate/skew —— 平铺是无限的，斜切不会造成断裂。
-   the tile grid: repeats forever, so shearing it never breaks an edge */
+/* The tile grid inside each plane: an infinitely repeating texture.
+   backdrop.js writes inset / background-size from CONFIG.tileSize,
+   leaving one extra tile of margin on every side so sliding through
+   a full period never exposes the layer's own edge. The texture is
+   rotated and skewed along with its layer — because the tiling is
+   infinite, shearing it can never break an edge. */
 .parallax-tile {
   position: absolute;
   inset: 0;
@@ -222,11 +226,11 @@ body.is-cover {
   inset: 0;
 }
 
-/* ---- 4. 悬浮前景 / foreground -------------------------------- */
+/* ---- 4. The floating foreground ------------------------------- */
 
-/* §4 前景 UI：position: fixed + 最高 z-index，完全脱离背景的
-   倾斜、透视与视差位移。规范里管它叫 .button-4。
-   the one interactive node — pinned above, never touched by the parallax */
+/* §4 The foreground UI: position: fixed at the highest z-index,
+   fully detached from the backdrop's skew, perspective and parallax
+   offset. The spec calls this one .button-4. */
 .button-4 {
   position: fixed;
   z-index: 90;
@@ -267,7 +271,7 @@ body.is-cover {
   opacity: 0.75;
 }
 
-/* ---- 页面外壳 / page shell ------------------------------------ */
+/* ---- Page shell ----------------------------------------------- */
 
 .shell {
   max-width: var(--page);
@@ -296,7 +300,7 @@ body.is-cover {
   color: var(--accent);
 }
 
-/* ---- §1 自我介绍大图 / hero ----------------------------------- */
+/* ---- §1 The self-introduction image / hero -------------------- */
 
 .hero {
   display: grid;
@@ -307,8 +311,8 @@ body.is-cover {
   padding: clamp(2rem, 6vw, 4rem) 0;
 }
 
-/* contain 而不是 cover：这张图是有内容的，不能被裁掉
-   contain, not cover — the image carries content, never crop it */
+/* contain, not cover: this image carries content, so it must never
+   be cropped. */
 .hero-frame {
   display: inline-flex;
   max-width: 100%;
@@ -340,17 +344,17 @@ body.is-cover {
   animation: nudge 2.2s var(--ease) infinite;
 }
 
-/* 滚到树那一屏之后提示就没用了 / the cue has done its job */
+/* Once the tree is scrolled into view, the cue has done its job. */
 .tree-revealed .hero-cue {
   opacity: 0;
 }
 
-/* ---- §2 树 / the tree ----------------------------------------- */
+/* ---- §2 The tree ---------------------------------------------- */
 
-/* 连线全是 .tree-item 的 ::before / ::after 画出来的，不用 JS 算坐标。
-   --stem 是每一段竖线的长度，父子两点之间的间距 = 2 × --stem。
-   All wires are pseudo-elements, no JS geometry. The gap between a
-   parent dot and its children is 2 × --stem. */
+/* Every wire is drawn by the ::before / ::after pseudo-elements on
+   .tree-item — there is no JS geometry anywhere. --stem is the length
+   of one vertical segment, so the gap between a parent dot and its
+   children is 2 × --stem. */
 .tree-stage {
   --stem: clamp(1.75rem, 4vw, 2.75rem);
   --sib: clamp(0.4rem, 2.5vw, 1.75rem);
@@ -358,7 +362,7 @@ body.is-cover {
   --wire: 1px solid var(--rule);
 
   padding: clamp(2rem, 7vw, 5rem) 0 clamp(4rem, 12vw, 8rem);
-  /* 树长宽了就横向滚，不要压扁 / wide trees scroll instead of squashing */
+  /* A wide tree scrolls sideways rather than being squashed. */
   overflow-x: auto;
   overscroll-behavior-x: contain;
 }
@@ -378,13 +382,13 @@ body.is-cover {
   list-style: none;
 }
 
-/* 盖掉上面的 display:flex，不然 hidden 不生效
-   without this, [hidden] loses to display:flex */
+/* This has to override the display:flex above, or [hidden] loses to
+   it and stops working. */
 .tree-level[hidden] {
   display: none;
 }
 
-/* 父节点下来的那一截竖线 / the stem descending from the parent */
+/* The stem descending from the parent dot. */
 .tree-level::before {
   content: "";
   position: absolute;
@@ -402,10 +406,9 @@ body.is-cover {
   padding: var(--stem) var(--sib) 0;
 }
 
-/* 每个节点头上两段横线，和兄弟节点拼成一整条横杠；
-   ::after 还带着往下接到圆点的那段竖线
-   two half-bars per node join up into one bar across the siblings;
-   ::after also carries the vertical drop into the dot */
+/* Two half-bars sit above each node and join with its siblings' into
+   one continuous bar across the row; ::after additionally carries the
+   vertical drop down into the dot. */
 .tree-item::before,
 .tree-item::after {
   content: "";
@@ -425,8 +428,8 @@ body.is-cover {
   border-left: var(--wire);
 }
 
-/* 两端的节点：外侧那半段不画，内侧拐个圆角
-   the end nodes drop their outer half and round the corner */
+/* The nodes at each end drop their outer half-bar and round off the
+   inner corner. */
 .tree-item:first-child::before,
 .tree-item:last-child::after {
   border: 0;
@@ -441,17 +444,17 @@ body.is-cover {
   border-radius: 0 var(--bend) 0 0;
 }
 
-/* 独生子：不需要横杠，父节点的竖线直接接下来
-   an only child needs no bar, the parent stem reaches it already */
+/* An only child needs no bar at all — the parent's stem already
+   reaches it directly. */
 .tree-item:only-child::before,
 .tree-item:only-child::after {
   display: none;
 }
 
-/* Career / Hobby 的子节点改为纵向清单。
-   连接线停在图片外侧，再用短横线接入节点，避免穿过图片和文字。
-   The children form a vertical timeline whose wires stay clear of
-   both the thumbnails and their labels. */
+/* The children of Career / Hobby are laid out as a vertical list
+   instead. The connecting line stops outside the thumbnails and
+   reaches each node with a short horizontal stub, so it never cuts
+   across an image or its label. */
 .tree-depth-2,
 .tree-root > .tree-item > .tree-level > .tree-item > .tree-level {
   --leaf-size: 4.75rem;
@@ -473,7 +476,8 @@ body.is-cover {
   height: auto;
 }
 
-/* 从 Career / Hobby 圆点的 9 点钟方向出发，再弯向下面的主干。 */
+/* Leaves the Career / Hobby dot at the 9 o'clock position, then
+   bends down into the trunk below. */
 .tree-depth-2::after,
 .tree-root > .tree-item > .tree-level > .tree-item > .tree-level::after {
   content: "";
@@ -512,7 +516,8 @@ body.is-cover {
   display: none;
 }
 
-/* 叶子文字放在圆点右边，线永远不会穿字。 */
+/* Leaf labels sit to the right of the dot, so a wire can never run
+   through the text. */
 .tree-depth-2 .dot.is-leaf .dot-text,
 .tree-root > .tree-item > .tree-level > .tree-item > .tree-level .dot.is-leaf .dot-text {
   top: 50%;
@@ -522,7 +527,7 @@ body.is-cover {
   text-align: left;
 }
 
-/* 树根上面什么都没有 / nothing hangs above the root */
+/* Nothing hangs above the root. */
 .tree-root,
 .tree-root > .tree-item {
   padding-top: 0;
@@ -534,12 +539,11 @@ body.is-cover {
   display: none;
 }
 
-/* ---- 圆点组件 / the dot component ----------------------------- */
+/* ---- The dot component ---------------------------------------- */
 
-/* 一个 .dot 就是一个圆。改 --size 就改大小。
-   标签是绝对定位的，所以它再长也不会把连线挤歪。
-   One .dot = one circle; --size is its diameter. The label is
-   absolutely positioned so its width can never shift the wires. */
+/* One .dot = one circle, and --size is its diameter. The label is
+   absolutely positioned, so however long it runs it can never push
+   the wires out of alignment. */
 .dot {
   --size: 4.75rem;
   position: relative;
@@ -575,13 +579,13 @@ body.is-cover {
   box-shadow: 0 1.25rem 2.5rem rgba(28, 26, 23, 0.26);
 }
 
-/* 展开中的节点：描一圈 accent 色的环 / open nodes get an accent ring */
+/* An expanded node is ringed in the accent color. */
 .dot.is-open .dot-disc {
   box-shadow: 0 0 0 0.2rem var(--paper), 0 0 0 calc(0.2rem + 1px) var(--accent),
     0 0.75rem 1.75rem rgba(28, 26, 23, 0.16);
 }
 
-/* 圆点下面的文字 / the label under the circle */
+/* The label under the circle. */
 .dot-text {
   position: absolute;
   top: calc(100% + 0.6rem);
@@ -597,9 +601,8 @@ body.is-cover {
 
 .dot-label {
   font-family: var(--serif);
-  /* 等宽字比衬线字宽出一截，标签在树上挨得近，所以比原来小一号
-     mono runs wider than the old serif; the labels sit close
-     together on the tree, so this is a step down from 1.05rem */
+  /* Mono runs wider than the old serif, and the labels sit close
+     together on the tree, so this is a step down from 1.05rem. */
   font-size: 0.9rem;
   line-height: 1.25;
 }
@@ -611,7 +614,7 @@ body.is-cover {
   color: var(--ink-soft);
 }
 
-/* 树根是空心圆，字写在圆里面 / the root is an outline, label inside */
+/* The root is an outlined circle with its label set inside it. */
 .dot.is-root .dot-disc {
   background-color: transparent;
   border: 1px solid var(--ink);
@@ -656,12 +659,10 @@ body.is-cover {
   color: var(--ink);
 }
 
-/* ---- 生长动画 / the growing ----------------------------------- */
+/* ---- The growing animation ------------------------------------ */
 
-/* 一层从 display:none 变回 flex 的时候动画会重新跑一遍，
-   所以每次展开都会重新"长"出来
-   animations restart when a level leaves display:none, so each
-   expand re-grows */
+/* Animations restart whenever a level leaves display:none, which is
+   what makes every expand grow again rather than just appear. */
 .tree-level:not(.tree-root):not([hidden]) {
   animation: wires 0.7s var(--ease) backwards;
 }
@@ -694,10 +695,9 @@ body.is-cover {
   }
 }
 
-/* start 圆要等滚到这一屏才浮出来。armed 这个类是 JS 加的，
-   所以没有 JS 的时候圆点本来就是可见的。
-   the root dot waits for the scroll. "armed" is added by JS only,
-   so with JS off the dot is simply visible from the start. */
+/* The root dot waits for the scroll before it surfaces. The "armed"
+   class is added by JS only, so with JS off the dot is simply
+   visible from the start. */
 .tree-armed .tree-root > .tree-item > .dot {
   opacity: 0;
   transform: translateY(1.25rem);
@@ -718,7 +718,7 @@ body.is-cover {
   color: var(--ink-soft);
 }
 
-/* 没有图片时的占位色块 / placeholder when image is missing */
+/* The placeholder block used when an image is missing. */
 .is-empty {
   background-image: linear-gradient(
     var(--seed, 40deg),
@@ -728,7 +728,7 @@ body.is-cover {
   );
 }
 
-/* ---- 详情浮层 / detail overlay -------------------------------- */
+/* ---- The detail overlay --------------------------------------- */
 
 .overlay {
   position: fixed;

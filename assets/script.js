@@ -1,13 +1,11 @@
 /* ===================================================================
  * script.js — rendering logic
  *
- * 从 window.portfolioData 读出那棵树，生成嵌套的 <ul>/<li>。
- * 连线是纯 CSS 画的（style.css 里 .tree-item 的 ::before / ::after），
- * 所以这里完全不用算坐标 —— 窗口怎么缩放都不会错位。
- *
- * Builds nested <ul>/<li> from the tree in data.js. The connector
- * lines are pure CSS pseudo-elements, so there is no position math
- * here and nothing to recalculate on resize.
+ * Reads the tree out of window.portfolioData and builds it as nested
+ * <ul>/<li> elements. The connector lines between dots are drawn
+ * entirely in CSS (the ::before / ::after rules on .tree-item in
+ * style.css), so there are no coordinates computed here and nothing
+ * to recalculate on resize — the wires can never drift out of place.
  * =================================================================== */
 
 (function () {
@@ -24,7 +22,7 @@
     return node;
   }
 
-  /* 图片缺失时退回渐变色块 / fall back to a gradient disc */
+  /* Fall back to a gradient disc when the image is missing. */
   function paintDisc(disc, src, seed) {
     disc.style.setProperty("--seed", seed * 47 + "deg");
 
@@ -43,7 +41,7 @@
     probe.src = src;
   }
 
-  /* ---- 一个圆点 / one dot -------------------------------------- */
+  /* ---- One dot ------------------------------------------------- */
 
   function makeDot(item, variant, seed) {
     var dot = el("button", "dot " + variant);
@@ -61,7 +59,7 @@
     return dot;
   }
 
-  /* ---- 把一个点和它下面那层接起来 / wire a dot to its branch ---- */
+  /* ---- Wire a dot to the level hanging below it ---------------- */
 
   function wire(dot, list) {
     dot.classList.add("has-kids");
@@ -74,7 +72,7 @@
       dot.classList.toggle("is-open", !wasOpen);
       list.hidden = wasOpen;
 
-      /* 展开后把新长出来的一层滚进视野 / scroll the new level into view */
+      /* Scroll the newly grown level into view. */
       if (!wasOpen) {
         requestAnimationFrame(function () {
           list.scrollIntoView({ behavior: "smooth", block: "nearest" });
@@ -83,9 +81,9 @@
     });
   }
 
-  /* ---- 一层节点 / one level of the tree ------------------------ */
-  /* depth 1 = Career / Hobby 那层，再往下都是叶子
-     depth 1 is the branch row; anything deeper is a leaf */
+  /* ---- One level of the tree ----------------------------------- */
+  /* depth 1 is the branch row (Career / Hobby); anything deeper is
+     treated as a leaf. */
 
   function makeLevel(items, depth) {
     var list = el("ul", "tree-level");
@@ -103,7 +101,7 @@
         wire(dot, sub);
         cell.appendChild(sub);
       } else {
-        /* 叶子节点 = 打开详情浮层 / a leaf opens the overlay */
+        /* A leaf has nothing to expand, so it opens the overlay. */
         dot.addEventListener("click", function () {
           openDetail(item);
         });
@@ -135,13 +133,13 @@
     mount.appendChild(root);
   }
 
-  /* ---- 滚到树那一屏时再让 start 圆浮出来 / reveal on scroll ----- */
+  /* ---- Hold the start dot back until the tree scrolls into view - */
 
   function armReveal(stage) {
     if (!stage || !("IntersectionObserver" in window)) return;
 
-    /* 先加 armed 再隐藏：没有 JS 的时候圆点是默认可见的
-       class added by JS only, so the dot stays visible without JS */
+    /* This class is added by JS only, which is deliberate: with JS
+       off the dot has no hiding rule applied and stays visible. */
     document.body.classList.add("tree-armed");
 
     var io = new IntersectionObserver(
@@ -158,7 +156,7 @@
     io.observe(stage);
   }
 
-  /* ---- 详情浮层 / detail overlay ------------------------------- */
+  /* ---- The detail overlay -------------------------------------- */
 
   var overlay = null;
   var lastFocus = null;
@@ -233,7 +231,7 @@
     overlay.setAttribute("aria-hidden", "true");
     document.body.classList.remove("is-locked");
 
-    /* 焦点还回刚才点的那个圆 / hand focus back to the dot */
+    /* Hand focus back to the dot that opened this. */
     if (lastFocus && lastFocus.focus) lastFocus.focus();
     lastFocus = null;
   }
@@ -242,7 +240,7 @@
     if (e.key === "Escape") closeDetail();
   });
 
-  /* ---- 启动 / boot --------------------------------------------- */
+  /* ---- Boot ---------------------------------------------------- */
 
   document.addEventListener("DOMContentLoaded", function () {
     var tree = document.querySelector("[data-tree]");

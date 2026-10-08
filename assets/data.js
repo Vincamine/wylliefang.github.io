@@ -1,25 +1,25 @@
 /* ===================================================================
- * data.js — 唯一需要编辑的文件 / the only file you edit to add content
+ * data.js — the only file you edit to add content
  *
- *
- * The whole Outline page IS the tree below. One object = one circle.
- * Append to a children array, save, reload. No layout edits.
+ * The whole Outline page IS the tree below. One object = one circle
+ * on the page. Append an object to a children array, save, reload —
+ * a new dot grows and the layout never needs touching.
  *
  *   {
- *     title:  "点下面的标题 / label under the dot",   // required
- *     meta:   "年份、类型等小字 / small caps line",   // optional
- *     icon:   "assets/images/icons/xxx.png",         // optional — 留空则用渐变色块
- *     text:   "点开后浮层里的正文 / overlay body",    // optional
- *     link:   "https://...",                         // optional — 浮层里的外链
- *     linkLabel: "View repository",                  // optional — 外链文字
- *     children: [ ... ]                              // optional — 有则这个点可以展开
+ *     title:  "label under the dot",        // required
+ *     meta:   "small caps line: year, type" // optional
+ *     icon:   "assets/images/icons/x.png",  // optional — empty = gradient disc
+ *     text:   "body copy in the overlay",   // optional
+ *     link:   "https://...",                // optional — outbound link in the overlay
+ *     linkLabel: "View repository",         // optional — that link's text
+ *     children: [ ... ]                     // optional — if present, the dot expands
  *   }
  *
- * 有 children 的点：点击 = 展开/收起下一层。
- * 没有 children 的点：点击 = 打开详情浮层。
- * A dot with children toggles its branch; a dot without one opens the overlay.
+ * A dot WITH children toggles its branch open and closed.
+ * A dot WITHOUT children opens the detail overlay.
  *
- * 可用的图标都在 assets/images/icons/ 里，文件名就是 icon 字段的值。
+ * The available icons all live in assets/images/icons/ — the filename
+ * is exactly what the icon field takes.
  * =================================================================== */
 
 window.portfolioData = {
@@ -32,22 +32,23 @@ window.portfolioData = {
     email: "wylliefang@gmail.com",
   },
 
-  /* ---- 页首的自我介绍大图 / the hero image --------------------- */
+  /* ---- The self-introduction image at the top of the page ------ */
 
   intro: {
     image: "assets/images/self-intro.png",
     alt: "Wyllie Fang — self introduction",
   },
 
-  /* ---- 树根 / the root dot ------------------------------------- */
+  /* ---- The root dot -------------------------------------------- */
   /* outlined circle, label inside it; click grows the two branches. */
 
   root: {
     icon: "assets/images/icons/ying_yang_1.png",
   },
 
-  /* ---- 两条主干 / the two branches ----------------------------- */
-  /* 这一层就是原来 outline 页的两个大圆 / the old hub circles */
+  /* ---- The two branches ---------------------------------------- */
+  /* This level is what used to be the two hub circles on the old
+     outline page. */
 
   branches: [
 
@@ -102,7 +103,7 @@ window.portfolioData = {
           title: "Blueberry",
           meta: "Collection",
           icon: "assets/images/icons/circle_blueberry.png",
-          text: "收藏品也是一个节点。icon 留空时会自动用渐变色块占位。",
+          text: "A collected object is a node too. Leave icon empty and\n            a gradient disc stands in for the image.",
         },
       ],
     },
